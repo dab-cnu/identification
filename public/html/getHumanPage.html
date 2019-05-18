@@ -3,34 +3,25 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <title>신분정보 열람</title>
     </head>
     <body>
         <div class="container">
             <div class="row">
                 <div class="col-md-6 offset-md-3 text-xs-center">
                     <br>
-                    <h3>Add Human</h3>
+                    <h3>신분정보 열람</h3>
                     <br>
                     <div>
                         <div class="form-group">
-                            <label for="publicKeyForAdd">Enter publicKey</label>
-                            <textarea id="publicKeyForAdd" rows="15" cols="65"></textarea><br/>
-                            <label for="privateKeyForAdd">Enter privateKey</label>
-                            <textarea id="privateKeyForAdd" rows="15" cols="65"></textarea><br/>
-                            <label for="info">Enter info</label>
-                            <input type="text" class="form-control" id="info">
+                            <label for="publicKeyForGet">공개키</label><br>
+                            <textarea id="publicKeyForGet" rows="5" cols="74"></textarea><br/>
+                            <label for="privateKeyForGet">개인키</label><br>
+                            <textarea id="privateKeyForGet" rows="5" cols="74"></textarea><br/>
                         </div>
-                        <button onclick="addHuman()" class="btn btn-primary">Add</button>
-                        <br><br>
-                    </div>
-                    <div>
-                        <div class="form-group">
-                            <label for="publicKeyForGet">Enter publicKey</label>
-                            <textarea id="publicKeyForGet" rows="15" cols="65"></textarea><br/>
-                            <label for="privateKeyForGet">Enter privateKey</label>
-                            <textarea id="privateKeyForGet" rows="15" cols="65"></textarea><br/>
-                        </div>
-                        <button onclick="getHuman()" class="btn btn-primary">Get Info</button> 
+                        <button onclick="getHuman()" class="btn btn-primary">열람</button> 
+                        <button onclick="verify()" class="btn btn-primary">전자서명</button> 
+                        <button onclick="window.location.href='/'" class="btn btn-primary">돌아가기</button>
                         <br><br>
                     </div>
                     <div class="alert alert-info" role="alert" id="message">

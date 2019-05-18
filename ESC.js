@@ -15,7 +15,15 @@ console.log("You can access the server (http://localhost:8080)");
 app.use(express.static("public"));
 
 app.get("/", function(req, res) {
-	res.sendFile(__dirname + "/public/html/index.html");
+	res.sendFile(__dirname + "/public/html/menu.html");
+});
+
+app.get("/addHuamnPage", function(req, res) {
+	res.sendFile(__dirname + "/public/html/addHumanPage.html");
+});
+
+app.get("/getHuamnPage", function(req, res) {
+	res.sendFile(__dirname + "/public/html/getHumanPage.html");
 });
 
 var Web3 = require("web3");
@@ -29,11 +37,12 @@ var humanInfo = humanInfoContract.at("0x4a21769ac327ff35c16ecb82527902036fef4634
 
 
 // callAddHuman
-app.post("/addHuman", function(req, res) {
+app.post("/addHumanPage/addHuman", function(req, res) {
     var _publicKey = req.body.publicKey;
     var _info = req.body.info;
     var _sign = req.body.sign;
 
+		console.log('hi');
     humanInfo.addHuman.sendTransaction(_publicKey, _info, _sign, {from: web3.eth.accounts[0]}, function(error, transactionHash) {
 		if (!error) {
 			res.send(transactionHash);
@@ -44,23 +53,8 @@ app.post("/addHuman", function(req, res) {
 	})
 });
 
-// app.get("/addHuman", function(req, res) {
-// 		var _publicKey = req.query.publicKey;
-// 		var _info = req.query.info;
-// 		var _sign = req.query.sign;
-
-// 		humanInfo.addHuman.sendTransaction(_publicKey, _info, _sign, {from: web3.eth.accounts[0]}, function(error, transactionHash) {
-// 		if (!error) {
-// 			res.send(transactionHash);
-// 		}
-// 		else {
-// 			res.send("Error");
-// 		}
-// 	})
-// });
-
 // callGetHuman
-app.get("/getHuman", function(req, res) {
+app.get("/getHumanPage/getHuman", function(req, res) {
 	var _publicKey = req.query.publicKey;
 
 	var human = humanInfo.getHuman.call(_publicKey);

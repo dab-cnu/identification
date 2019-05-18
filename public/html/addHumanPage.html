@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <title>신분정보 등록</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 text-xs-center">
+                    <br>
+                    <h3>신분정보 등록</h3>
+                    <br>
+                    <div>
+                        <div class="form-group">
+                            <label for="publicKeyForAdd">공개키</label><br>
+                            <textarea id="publicKeyForAdd" rows="5" cols="74"></textarea><br/>
+                            <label for="privateKeyForAdd">개인키</label><br>
+                            <textarea id="privateKeyForAdd" rows="5" cols="74"></textarea><br/>
+                            <label for="info">신분정보</label>
+                            <input type="text" class="form-control" id="info">
+                        </div>
+                        <button onclick="addHuman()" class="btn btn-primary">등록</button>
+                        <button onclick="window.location.href='/'" class="btn btn-primary">돌아가기</button>
+                        <br><br>
+                    </div>
+                    <div class="alert alert-info" role="alert" id="message">
+                        You can either submit file's details and get information about it.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="/js/jquery.min.js"></script>
+        <script type="text/javascript" src="/js/jsencrypt.min.js"></script>
+        <script type="text/javascript" src="/js/sha256.js"></script>
+        <script type="text/javascript" src="/js/encoder.js"></script>
+        <script type="text/javascript" src="/js/decoder.js"></script>
+        <script type="text/javascript" src="/js/WebDataController.js"></script>
+    </body>
+</html>
