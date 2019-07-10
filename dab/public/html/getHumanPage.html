@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <title>신분정보 열람</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 text-xs-center">
+                    <br>
+                    <h3>신분정보 열람</h3>
+                    <br>
+                    <div>
+                        <div class="form-group">
+                            <label for="publicKeyForGet">공개키</label><br>
+                            <textarea id="publicKeyForGet" rows="5" cols="74"></textarea><br/>
+                            <label for="privateKeyForGet">개인키</label><br>
+                            <textarea id="privateKeyForGet" rows="5" cols="74"></textarea><br/>
+                        </div>
+                        <button onclick="getHuman()" class="btn btn-primary">열람</button> 
+                        <button onclick="verify()" class="btn btn-primary">전자서명</button> 
+                        <button onclick="window.location.href='/'" class="btn btn-primary">돌아가기</button>
+                        <br><br>
+                    </div>
+                    <div class="alert alert-info" role="alert" id="message">
+                        You can either submit file's details and get information about it.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="/js/jquery.min.js"></script>
+        <script type="text/javascript" src="/js/jsencrypt.min.js"></script>
+        <script type="text/javascript" src="/js/sha256.js"></script>
+        <script type="text/javascript" src="/js/sha1.js"></script>
+        <script type="text/javascript" src="/js/md5.js"></script>
+        <script type="text/javascript" src="/js/encoder.js"></script>
+        <script type="text/javascript" src="/js/decoder.js"></script>
+        <script type="text/javascript" src="/js/WebDataController.js"></script>
+    </body>
+</html>
