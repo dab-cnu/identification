@@ -17,7 +17,7 @@ app.use(express.static("public"));
 
 app.get("/", function(req, res) {
 	res.sendFile(__dirname + "/public/html/menu.html");
-});
+})
 
 app.get("/addHuamnPage", function(req, res) {
 	res.sendFile(__dirname + "/public/html/addHumanPage.html");
@@ -34,25 +34,28 @@ web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 var contract = JSON.parse(fs.readFileSync('./HumanInfo.json', 'utf8'));
 
 var humanInfoContract = web3.eth.contract(contract.abi);
-var humanInfo = humanInfoContract.at("0xd8c14f783d8b44f877c4c4a8ea4953785d664f50");
+var humanInfo = humanInfoContract.at("0x6b46361c27fbbd49c9a4d5d30ed8cbf2e8b53487");
 var gasEstimate = web3.eth.estimateGas(humanInfo);
-
-var _img;
-
-
+console.log(gasEstimate)
 app.post("/addHumanPage/addHuman", function(req, res){
-	_img = "req.body.image";
+	var _publicKey = req.body.publicKey;
+    var _info = req.body.info;
+	var _sign = req.body.sign;
+	var _img = req.body.image;
+	console.log(_publicKey)
+	
+
 	const IPFS = require("ipfs")
 	const node = new IPFS({ start: false })
-	var ipfs_hash_value =""
+
 	node.once('ready', () => {
 		node.add(Buffer.from(_img), (err, files) => {
 			if (err) return console.error(err)
 			console.log(files[0].hash)
-			ipfs_hash_value = files[0].hash
-			humanInfo.addHuman.sendTransaction("3331", "332", "!", files[0].hash, {from: web3.eth.accounts[0], gas: gasEstimate +1500000}, function(error, transactionHash) {
+			humanInfo.addHuman.sendTransaction("_publicKey", "_info", "_sign", "files[0].hash", {from: web3.eth.accounts[0], gas: gasEstimate+1000000}, function(error, transactionHash) {
 				if (!error) {
 					res.send(transactionHash);
+					console.log(web3.eth.estimateGas(humanInfo))
 				}
 				else {
 					res.send("Error");

@@ -21,10 +21,11 @@ contract HumanInfo {
     humanList[_publicKey] = Human(_info, _sign, _image);
   }
 
-  function getHuman(string memory _publicKey) public view returns (string memory _info, string memory _sign) {
+  function getHuman(string memory _publicKey) public view returns (string memory _info, string memory _sign, string memory _img) {
     // require(humanList[_account].age != 0);
     _info = humanList[_publicKey].info;
     _sign = humanList[_publicKey].sign;
+    _img = humanList[_publicKey].image;
   }
 
 }
