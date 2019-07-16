@@ -4,10 +4,6 @@ pragma solidity ^0.5.0;
 contract HumanInfo {
   address public owner;
 
-  constructor() public {
-    owner = msg.sender;
-  }
-
   struct Human {
     string info;
     string sign;
@@ -16,16 +12,31 @@ contract HumanInfo {
 
   mapping (string => Human) private humanList;
 
-  function addHuman(string memory _publicKey, string memory _info, string memory _sign, string memory _image) public {
-    // require(humanList[_publicKey]._sign == 0);
-    humanList[_publicKey] = Human(_info, _sign, _image);
+  function addHuman(string memory _publicKey, string memory _info) public {
+    humanList[_publicKey] = Human(_info, "0", "0");
+  }
+  
+  function setSign(string memory _publicKey, string memory _sign) public {
+    humanList[_publicKey].sign = _sign;
   }
 
+  function setImage(string memory _publicKey, string memory _image) public {
+    humanList[_publicKey].image = _image;
+  }
+
+<<<<<<< HEAD
   function getHuman(string memory _publicKey) public view returns (string memory _info, string memory _sign, string memory _img) {
     // require(humanList[_account].age != 0);
     _info = humanList[_publicKey].info;
     _sign = humanList[_publicKey].sign;
     _img = humanList[_publicKey].image;
+=======
+  function getHuman(string memory _publicKey) public view returns (string memory _info, string memory _sign, string memory _image) {
+    // require(humanList[_account].age != 0);
+    _info = humanList[_publicKey].info;
+    _sign = humanList[_publicKey].sign;
+    _image = humanList[_publicKey].image;
+>>>>>>> upstream/master
   }
 
 }

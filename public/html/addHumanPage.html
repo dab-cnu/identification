@@ -20,6 +20,8 @@
                             <textarea id="privateKeyForAdd" rows="5" cols="74"></textarea><br/>
                             <label for="info">신분정보</label>
                             <input type="text" class="form-control" id="info">
+                            <label for="image">이미지</label>
+                            <input type="file" class="form-control" id="image">
                         </div>
                         <button onclick="addHuman()" class="btn btn-primary">등록</button>
                         <button onclick="window.location.href='/'" class="btn btn-primary">돌아가기</button>
@@ -27,6 +29,9 @@
                     </div>
                     <div class="alert alert-info" role="alert" id="message">
                         You can either submit file's details and get information about it.
+                    </div>
+                    <div>
+                        <img src="" id="testimage" alt="">
                     </div>
                 </div>
             </div>
@@ -37,5 +42,6 @@
         <script type="text/javascript" src="/js/encoder.js"></script>
         <script type="text/javascript" src="/js/decoder.js"></script>
         <script type="text/javascript" src="/js/WebDataController.js"></script>
+        <script type="text/javascript" src="/js/aes.js"></script>
     </body>
 </html>

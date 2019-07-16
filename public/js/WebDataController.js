@@ -2,18 +2,26 @@ function addHuman() {
 	var _publicKey = document.getElementById("publicKeyForAdd").value;
 	var _privateKey = document.getElementById("privateKeyForAdd").value;
 	var _info = document.getElementById("info").value;
-	
+	var image = document.getElementById("image").files[0];
+
 	var _encodedHumanInfo = encodeHumanInfo(_publicKey, _info);
 	var _sign = makeSign(_privateKey);
+	
+	var reader = new FileReader();
 
-	$.post("/addHumanPage/addHuman", { publicKey: sha256(_publicKey), info: _encodedHumanInfo, sign: _sign }, function(data) {
-		if(data == "Error") {
-			$("#message").text("An error occured.");
-		}
-		else {
-			$("#message").html("Transaction hash: " + data);
-		}
-	});
+	reader.onload = function(e) {
+		var encryped_image = CryptoJS.AES.encrypt(e.target.result, _privateKey);
+
+		$.post("/addHumanPage/addHuman", { publicKey: sha256(_publicKey), info: _encodedHumanInfo, sign: _sign, image: encryped_image.toString() }, function(data) {
+			if(data == "Error") {
+				$("#message").text("An error occured.");
+			}
+			else {
+				$("#message").html("Transaction hash: " + data);
+			}
+		});
+	}
+	reader.readAsDataURL(image);
 }
 
 function getHuman() {
@@ -26,6 +34,8 @@ function getHuman() {
 		}
 		else {
 			$("#message").html("info : " + decodeHumanInfo(_privateKey, data[0]));
+			var decrypted = CryptoJS.AES.decrypt(data[2], _privateKey).toString(CryptoJS.enc.Latin1);
+			$("#testimage").attr("src", decrypted);
 		}
 	});
 }
