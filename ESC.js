@@ -1,8 +1,9 @@
 var express = require("express");  
 var bodyParser = require("body-parser");
 var app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(bodyParser.json({limit : '10mb'}));
+app.use(bodyParser.urlencoded({ extended: true, limit:'10mb' }));
 
 var server = require("http").createServer(app);
 
@@ -26,9 +27,16 @@ app.get("/getHuamnPage", function(req, res) {
 });
 
 
+// For test
+app.get("/test", function(req, res) {
+	res.sendFile(__dirname + "/public/html/test.html");
+});
+
+
 
 var Web3 = require("web3");
 var fs = require('fs');
+var IPFS = require("ipfs");
 web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));	
 
 var abi = JSON.parse(fs.readFileSync('./HumanInfo.json', 'utf8'));
@@ -43,16 +51,15 @@ app.post("/addHumanPage/addHuman", function(req, res) {
 	var _publicKey = req.body.publicKey;
     var _info = req.body.info;
 	var _sign = req.body.sign;
-	var _image = 'test';
+	var _image = req.body.image;
 
-	var IPFS = require("ipfs")
 	var node = new IPFS({ start: false });
 
 	node.once('ready', () => {
 		node.add(Buffer.from(_image), (err, files) => {
 			if (err) return console.error(err)
 			var hashcode = files[0].hash
-
+			
 			console.log('===================================');
 			console.log('[call addHuman]');
 			console.log('public Key (hash) : ' + _publicKey);
@@ -76,5 +83,25 @@ app.get("/getHumanPage/getHuman", function(req, res) {
 	var _publicKey = req.query.publicKey;
 
 	var human = humanInfo.getHuman.call(_publicKey);
-	res.send(human);
-})
+	var _info = human[0];
+	var _sign = human[1];
+	var hashcode = human[2];
+
+	var node = new IPFS();
+
+	node.once('ready', () => {
+		node.cat(hashcode, (err, image_data) => {
+			var human_data = [_info, _sign, image_data.toString()];
+			console.log('===================================');
+			console.log('[call getHuman]');
+			console.log('public Key (hash) : ' + _publicKey);
+			console.log('info (hash) : ' + _info);
+			console.log('sign (hash) : ' + _sign);
+			console.log('image (hash) : ' + hashcode);
+			console.log('-----------------------------------');
+			res.send(human_data);
+			console.log('function call : send complete');
+			console.log('===================================');
+		});
+	});
+});
