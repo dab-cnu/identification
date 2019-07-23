@@ -3,6 +3,8 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/identification.css">
+        
         <title>신분정보 열람</title>
     </head>
     <body>
@@ -24,10 +26,24 @@
                         <button onclick="window.location.href='/'" class="btn btn-primary">돌아가기</button>
                         <br><br>
                     </div>
-                    <div class="alert alert-info" role="alert" id="message">
-                        You can either submit file's details and get information about it.
+                <div id="id-outline">
+                    <div id ="id-info">
+                        <div class="alert alert-info" role="alert" id="info_name">
+                            
+                        </div>
+                        <div class="alert alert-info" role="alert" id="info_age">
+                            Here is the result
+                        </div>
+                        <div class="alert alert-info" role="alert" id="info_address">
+   
+                        </div>
                     </div>
-                    <img src="" id="testimage" alt="">
+
+                    <div id="id-image">
+                        <img src="" id="testimage" alt="" style="width : 150px; height : 200px;">
+                    </div>
+                </div>
+
                 </div>
             </div>
         </div>
