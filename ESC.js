@@ -33,7 +33,6 @@ app.get("/test", function(req, res) {
 });
 
 
-
 var Web3 = require("web3");
 var fs = require('fs');
 var IPFS = require("ipfs");
@@ -55,8 +54,8 @@ app.post("/addHumanPage/addHuman", function(req, res) {
 
 	var node = new IPFS({ start: false });
 
-	node.on('ready', async () => {
-		const a= await node.add(Buffer.from(_image), (err, files) => {
+	node.on('ready', () => {
+		node.add(Buffer.from(_image), (err, files) => {
 			if (err) return console.error(err)
 			var hashcode = files[0].hash
 			console.log('===================================');
@@ -67,27 +66,20 @@ app.post("/addHumanPage/addHuman", function(req, res) {
 			console.log('image (hash) : ' + hashcode);
 			console.log('-----------------------------------');
 			humanInfo.addHuman.sendTransaction(_publicKey, _info, {from: web3.eth.accounts[0], gas: web3.eth.estimateGas(humanInfo) + 350000}, function(error, transactionHash1){
-				
-				if(!error){
-				}
-				else{
+				if(error){
 					res.send("Error");
 				}
-				humanInfo.setSign.sendTransaction(_publicKey, _sign, {from: web3.eth.accounts[0], gas: web3.eth.estimateGas(humanInfo) + 150000}, function(error, transactionHash2){
-					if(!error){
-					}
-					else{
-						res.send("Error");
-					}
-				
-				humanInfo.setImage.sendTransaction(_publicKey, hashcode, {from: web3.eth.accounts[0], gas: web3.eth.estimateGas(humanInfo) + 150000}, function(error, transactionHash3){
+				humanInfo.setSign.sendTransaction(_publicKey, _sign, {from: web3.eth.accounts[0], gas: web3.eth.estimateGas(humanInfo) + 250000}, function(error, transactionHash2){
+				if(error){
+					res.send("Error");
+				}
+				humanInfo.setImage.sendTransaction(_publicKey, hashcode, {from: web3.eth.accounts[0], gas: web3.eth.estimateGas(humanInfo) + 250000}, function(error, transactionHash3){
 					if(!error){
 						var transactions = {
 							info : transactionHash1,
 							sign : transactionHash2,
 							img : transactionHash3
-						};
-						
+						};		
 						transactions.info = transactionHash1;
 						transactions.sign = transactionHash2
 						transactions.img = transactionHash3
@@ -117,17 +109,12 @@ app.post("/addHumanPage/addHuman", function(req, res) {
 // callGetHuman
 app.get("/getHumanPage/getHuman", function(req, res) {
 	var _publicKey = req.query.publicKey;
-
-	console.log("get smart contract now....");
 	var human = humanInfo.getHuman.call(_publicKey);
-	
 	var _info = human[0];
 	var _sign = human[1];
 	var hashcode = human[2];
-	console.log("get Image from ipfs");
 	var node = new IPFS({ start: false });
 	return node.once('ready', () => {
-		console.log("now we enter into ipfs")
 		node.cat(hashcode, (err, image_data) => {
 			var human_data = [_info, _sign, image_data.toString()];
 			console.log('===================================');

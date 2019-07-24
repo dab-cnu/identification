@@ -19,6 +19,8 @@ function addHuman() {
 		$.post("/addHumanPage/addHuman", { publicKey: sha256(_publicKey), info: _encodedHumanInfo, sign: _sign, image: encryped_image.toString() }, function(data) {
 			if(data == "Error") {
 				$("#message1").text("An error occured.");
+				$("#message2").text("An error occured.");
+				$("#message3").text("An error occured.");
 			}
 			else {
 				//var dataJSON = JSON.parse(data);
@@ -49,6 +51,7 @@ function getHuman() {
 			console.log(data[0]);
 			var decode_info = decodeHumanInfo(_privateKey, data[0]);
 			var decodeinfo = JSON.parse(decode_info);
+			console.log(decode_info);
 			var info_name = decodeinfo.name;
 			var info_age = decodeinfo.age;
 			var info_address = decodeinfo.address;
