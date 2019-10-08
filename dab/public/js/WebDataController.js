@@ -3,31 +3,34 @@ function addHuman() {
 	var _privateKey = document.getElementById("privateKeyForAdd").value;
 	var _info = document.getElementById("info").value;
 	
+	var _img = document.getElementById("test").value;
+
+
 	var _encodedHumanInfo = encodeHumanInfo(_publicKey, _info);
 	var _sign = makeSign(_privateKey);
 
-	$.post("/addHumanPage/addHuman", { publicKey: sha256(_publicKey), info: _encodedHumanInfo, sign: _sign}, function(data) {
+	$.post("/addHumanPage/addHuman", { publicKey: sha256(_publicKey), info: _encodedHumanInfo, sign: _sign, image: _img}, function(data) {
 		if(data == "Error") {
 			$("#message").text("An error occured.");
 		}
 		else {
-			$("#message").html("Transaction hash: " + data + "encoded code : " + _encodedHumanInfo);
+			$("#message").html("Transaction hash: " + data + "encoded code : " + sha256(_publicKey));
 
 		}
 	});
 }
-function addImg(){
-	var _img = document.getElementById("test").value;
-	//console.log(_img);
-	$.post("/addHumanPage/addImg", {image: _img}, function(data) {
-		if(data == "Error") {
-			$("#message").text("An error occured.");
-		}
-		else {
-			$("#message").html("image"+_img);
-		}
-	});
-}
+// function addImg(){
+// 	var _img = document.getElementById("test").value;
+// 	//console.log(_img);
+// 	$.post("/addHumanPage/addImg", {image: _img}, function(data) {
+// 		if(data == "Error") {
+// 			$("#message").text("An error occured.");
+// 		}
+// 		else {
+// 			$("#message").html("image"+_img);
+// 		}
+// 	});
+// }
 function getHuman() {
 	var _publicKey = document.getElementById("publicKeyForGet").value;
 	var _privateKey = document.getElementById("privateKeyForGet").value;

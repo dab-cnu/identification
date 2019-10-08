@@ -1,0 +1,23 @@
+#container{
+    text-align: center;
+}
+#id-info, #id-image{
+    float:left;
+    margin-left : 20px;
+    
+    margin-right: 10px;
+    margin-top: 20px;
+}
+#id-info{
+    width:250px;
+    height:200px;
+}
+#id-outline{
+    text-align: center;
+    width :500px;
+    height : 250px;
+    background-color: antiquewhite;
+}
+#info_name, #info_age, #info_address, #id-outline{
+    visibility: hidden;
+}

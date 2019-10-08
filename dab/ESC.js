@@ -17,7 +17,7 @@ app.use(express.static("public"));
 
 app.get("/", function(req, res) {
 	res.sendFile(__dirname + "/public/html/menu.html");
-});
+})
 
 app.get("/addHuamnPage", function(req, res) {
 	res.sendFile(__dirname + "/public/html/addHumanPage.html");
@@ -34,24 +34,31 @@ web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 var contract = JSON.parse(fs.readFileSync('./HumanInfo.json', 'utf8'));
 
 var humanInfoContract = web3.eth.contract(contract.abi);
-var humanInfo = humanInfoContract.at("0xd8c14f783d8b44f877c4c4a8ea4953785d664f50");
+var humanInfo = humanInfoContract.at("0xae3e617d2bf6ba3c32c3305c4278587cdf0f0b98");
 var gasEstimate = web3.eth.estimateGas(humanInfo);
 
-var _img;
-
-
 app.post("/addHumanPage/addHuman", function(req, res){
-	_img = "req.body.image";
+	var _publicKey = req.body.publicKey;
+    var _info = req.body.info;
+	var _sign = req.body.sign;
+	var _img = req.body.image;
+
+	
+	console.log(_publicKey)
+	
+
 	const IPFS = require("ipfs")
 	const node = new IPFS({ start: false })
-	var ipfs_hash_value =""
+
 	node.once('ready', () => {
 		node.add(Buffer.from(_img), (err, files) => {
 			if (err) return console.error(err)
-			console.log(files[0].hash)
-			ipfs_hash_value = files[0].hash
-			humanInfo.addHuman.sendTransaction("3331", "332", "!", files[0].hash, {from: web3.eth.accounts[0], gas: gasEstimate +1500000}, function(error, transactionHash) {
+			var _temp = _info + " " + files[0].hash
+			console.log(_temp)
+			humanInfo.addHuman.sendTransaction(_publicKey, _temp, _sign, {from: web3.eth.accounts[0], gas: gasEstimate+10000000}, function(error, transactionHash) {
+				
 				if (!error) {
+					console.log(transactionHash)
 					res.send(transactionHash);
 				}
 				else {
@@ -61,25 +68,14 @@ app.post("/addHumanPage/addHuman", function(req, res){
 		})
 	})
 });
-// humanInfo.addHuman.sendTransaction("123", ipfs_hash_value, {from: web3.eth.accounts[0], gas: gasEstimate +1000000}, function(error, transactionHash) {
-
-// 	console.log("here", ipfs_hash_value)
-// 	if (!error) {
-// 		res.send(transactionHash);
-// 	}
-// 	else {
-// 		res.send("Error");
-// 	}
-// })
-// callAddHuman
 
 
 // app.post("/addHumanPage/addHuman", function(req, res) {
 //     var _publicKey = req.body.publicKey;
 //     var _info = req.body.info;
 //     var _sign = req.body.sign;
-
-//     humanInfo.addHuman.sendTransaction(_publicKey, _info, _sign, {from: web3.eth.accounts[0], gas: gasEstimate 1000000}, function(error, transactionHash) {
+	
+//     humanInfo.addHuman.sendTransaction(_publicKey, _info, _sign, "abc", {from: web3.eth.accounts[0], gas: gasEstimate+1000000}, function(error, transactionHash) {
 // 		if (!error) {
 // 			res.send(transactionHash);
 // 		}

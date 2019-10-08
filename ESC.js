@@ -33,7 +33,6 @@ app.get("/test", function(req, res) {
 });
 
 
-
 var Web3 = require("web3");
 var fs = require('fs');
 var IPFS = require("ipfs");
@@ -42,7 +41,7 @@ web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 var abi = JSON.parse(fs.readFileSync('./HumanInfo.json', 'utf8'));
 
 var humanInfoContract = web3.eth.contract(abi);
-var humanInfo = humanInfoContract.at("0x053c00c2895b45835a81266a38358ae0a5d2953c");
+var humanInfo = humanInfoContract.at("0x20e34ce741fe41fc0b833b95cfa4e5b126f9e29e");
 
 web3.eth.defaultAccount = web3.eth.accounts[0];
 
@@ -55,11 +54,10 @@ app.post("/addHumanPage/addHuman", function(req, res) {
 
 	var node = new IPFS({ start: false });
 
-	node.once('ready', () => {
+	node.on('ready', () => {
 		node.add(Buffer.from(_image), (err, files) => {
 			if (err) return console.error(err)
 			var hashcode = files[0].hash
-			
 			console.log('===================================');
 			console.log('[call addHuman]');
 			console.log('public Key (hash) : ' + _publicKey);
@@ -67,29 +65,56 @@ app.post("/addHumanPage/addHuman", function(req, res) {
 			console.log('sign (hash) : ' + _sign);
 			console.log('image (hash) : ' + hashcode);
 			console.log('-----------------------------------');
-			humanInfo.addHuman.sendTransaction(_publicKey, _info, {from: web3.eth.accounts[0], gas: web3.eth.estimateGas(humanInfo) + 150000});
-			console.log('function call : addHuman complete');
-			humanInfo.setSign.sendTransaction(_publicKey, _sign, {from: web3.eth.accounts[0], gas: web3.eth.estimateGas(humanInfo) + 150000});
-			console.log('function call : setSign complete');
-			humanInfo.setImage.sendTransaction(_publicKey, hashcode, {from: web3.eth.accounts[0], gas: web3.eth.estimateGas(humanInfo) + 150000});
-			console.log('function call : setImage complete');
-			console.log('===================================');
+			humanInfo.addHuman.sendTransaction(_publicKey, _info, {from: web3.eth.accounts[0], gas: web3.eth.estimateGas(humanInfo) + 350000}, function(error, transactionHash1){
+				if(error){
+					res.send("Error");
+				}
+				humanInfo.setSign.sendTransaction(_publicKey, _sign, {from: web3.eth.accounts[0], gas: web3.eth.estimateGas(humanInfo) + 250000}, function(error, transactionHash2){
+				if(error){
+					res.send("Error");
+				}
+				humanInfo.setImage.sendTransaction(_publicKey, hashcode, {from: web3.eth.accounts[0], gas: web3.eth.estimateGas(humanInfo) + 250000}, function(error, transactionHash3){
+					if(!error){
+						var transactions = {
+							info : transactionHash1,
+							sign : transactionHash2,
+							img : transactionHash3
+						};		
+						transactions.info = transactionHash1;
+						transactions.sign = transactionHash2
+						transactions.img = transactionHash3
+						transactionsJSON = JSON.stringify(transactions);
+						console.log(transactionsJSON);
+						console.log("=====================================================");
+						console.log("  _____  _____ ______ ______  _____  _____  _____ ");
+						console.log("/  __ \\|  _  || ___ \\| ___ \\|  ___|/  __ \\|_   _| ");
+						console.log("| /  \\/| | | || |_/ /| |_/ /| |__  | /  \\/  | |   ");
+						console.log("| |    | | | ||    / |    / |  __| | |      | |   ");
+						console.log("| \\__/\\ \\\\_/ /| |\\ \\ | |\\ \\ | |___ | \\__/\\  | |   ");
+						console.log(" \\____/ \\___/ \\_| \\_|\\_| \\_|\\____/  \\____/  \\_/   ");
+						console.log("=====================================================");
+						res.send(transactions);
+					}
+					else{
+						res.send("Error");
+					}
+				});
+			});
+			});
 		})
 	})
+	
 });
 
 // callGetHuman
 app.get("/getHumanPage/getHuman", function(req, res) {
 	var _publicKey = req.query.publicKey;
-
 	var human = humanInfo.getHuman.call(_publicKey);
 	var _info = human[0];
 	var _sign = human[1];
 	var hashcode = human[2];
-
-	var node = new IPFS();
-
-	node.once('ready', () => {
+	var node = new IPFS({ start: false });
+	return node.once('ready', () => {
 		node.cat(hashcode, (err, image_data) => {
 			var human_data = [_info, _sign, image_data.toString()];
 			console.log('===================================');

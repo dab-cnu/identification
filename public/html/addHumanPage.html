@@ -5,8 +5,8 @@
         <link rel="stylesheet" href="/css/bootstrap.min.css">
         <title>신분정보 등록</title>
     </head>
-    <body>
-        <div class="container">
+    <body id="container">
+        <div class="container" id="container">
             <div class="row">
                 <div class="col-md-6 offset-md-3 text-xs-center">
                     <br>
@@ -19,7 +19,11 @@
                             <label for="privateKeyForAdd">개인키</label><br>
                             <textarea id="privateKeyForAdd" rows="5" cols="74"></textarea><br/>
                             <label for="info">신분정보</label>
-                            <input type="text" class="form-control" id="info">
+                            이름<input type="text" class="form-control" id="info_name">
+                            생년월일<input type="date" class="form-control" id="info_age">
+                            주소<input type="text" class="form-control" id="info_address">
+
+
                             <label for="image">이미지</label>
                             <input type="file" class="form-control" id="image">
                         </div>
@@ -27,8 +31,11 @@
                         <button onclick="window.location.href='/'" class="btn btn-primary">돌아가기</button>
                         <br><br>
                     </div>
-                    <div class="alert alert-info" role="alert" id="message">
-                        You can either submit file's details and get information about it.
+                    <div class="alert alert-info" role="alert" id="message1" style="visibility: hidden; width:600px;">
+                    </div>
+                    <div class="alert alert-info" role="alert" id="message2" style="visibility: hidden; width:600px;">
+                    </div>
+                    <div class="alert alert-info" role="alert" id="message3" style="visibility: hidden; width:600px;">
                     </div>
                     <div>
                         <img src="" id="testimage" alt="">
